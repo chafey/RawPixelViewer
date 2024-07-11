@@ -10,9 +10,11 @@
     <h1>
     RawPixelViewer
     </h1>
-
-    Draw a file containing raw pixel data to view it.  You can adjust the image properties before or after the image is dropped.
-
+    Draw a file containing raw pixel data to the image display area (black box) below to view it.
+    <br>
+    You can adjust the image properties before or after the raw pixel data is dropped.
+    <br>
+    You can adjust the window center/width by dragging the cursor (e.g. left mouse button drag)
     <br>
 
     <br>
@@ -26,7 +28,7 @@
         <input id="height" type="text" placeholder="e.g. 512" value="512">
       </div>
       <div class="form-group">
-        <label>Pixel Size</label>
+        <label>Component Size (bits)</label>
         <input id="pixelSize" type="text" placeholder="e.g. 16" value="16">
       </div>
       <div class="form-group">
@@ -193,6 +195,7 @@
 
       // this UI is only built for a single file so just dump the first one
       var file = files[0];
+      console.log(file)
 
       var fileReader = new FileReader();
       fileReader.onload = function (e) {
