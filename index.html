@@ -81,21 +81,61 @@
     return result;
    }
    
+    const guessAttributesFromFileSize = (fileSize) => {
+        if(fileSize == 524288) { // CT or MR
+            return {
+                width: 512,
+                height: 512,
+                pixelSize: 16,
+                signed: true,
+                pixelFormat: "Grayscale" 
+            }
+        } else if(fileSize === 2097152) { // XA
+            return {
+                width: 1024,
+                height: 1024,
+                pixelSize: 16,
+                signed: true,
+                pixelFormat: "Grayscale" 
+            }
+        } else if(fileSize === 921600) { // US
+            return {
+                width: 640,
+                height: 480,
+                pixelSize: 8,
+                signed: false,
+                pixelFormat: "RGB" 
+            }
+        }
+    }
+   
    const getPixelData = (width, height, bytesPerComponent, componentsPerPixel, signed) => {
+        // special case for RGB data
+        if(componentsPerPixel === 3 && bytesPerComponent === 1 && signed === false) {
+           const pixelData = new Uint8Array(width * height * 4);
+           const rawPixelDataAsUint8 = new Uint8Array(rawPixelData);
+           let pixelDataIndex =0;
+           let rawPixelDataIndex= 0;
+            for(let numPixels = 0; numPixels < width * height; numPixels++) {
+                pixelData[pixelDataIndex++] = rawPixelDataAsUint8[rawPixelDataIndex++];
+                pixelData[pixelDataIndex++] = rawPixelDataAsUint8[rawPixelDataIndex++];
+                pixelData[pixelDataIndex++] = rawPixelDataAsUint8[rawPixelDataIndex++];
+                pixelData[pixelDataIndex++] = 255; // Alpha channel 
+            }
+            console.log(pixelData);
+            console.log(rawPixelData);
+            return pixelData;
+        }
         if(signed) {
             if(bytesPerComponent === 1) {
-                //return new Int8Array(width * height * componentsPerPixel)
                 return new Int8Array(rawPixelData)
             } else {
-                //return new Int16Array(width * height * componentsPerPixel)
                 return new Int16Array(rawPixelData)
             }
         } else {
             if(bytesPerComponent === 1) {
-                //return new Uint8Array(width * height * componentsPerPixel)
                 return new Uint8Array(rawPixelData)
             } else {
-                //return new Uint16Array(width * height * componentsPerPixel)
                 return new Uint16Array(rawPixelData)
             }
         }
@@ -107,12 +147,11 @@
         const pixelSize = parseInt(document.getElementById('pixelSize').value);
         const signed = document.getElementById('signedness').value === "Signed";
         const pixelFormat = document.getElementById('pixelFormat').value;
-        const componentsPerPixel = pixelFormat === "RGB" ? 4 : 1;
+        const componentsPerPixel = pixelFormat === "RGB" ? 3 : 1;
         const bytesPerComponent = pixelSize <= 8 ? 1 : 2;
 
-        const pixelData = getPixelData(width, height, bytesPerComponent, componentsPerPixel, signed)
-        const stride = width * componentsPerPixel;
-
+        let pixelData = getPixelData(width, height, bytesPerComponent, componentsPerPixel, signed)
+        
         const minMax = getMinMax(pixelData);
         console.log(minMax)
 
@@ -200,15 +239,16 @@
       var fileReader = new FileReader();
       fileReader.onload = function (e) {
         rawPixelData = e.target.result;
+        const attrs = guessAttributesFromFileSize(file.size);
+        console.log(attrs);
+        if(attrs) {
+            document.getElementById("width").value = attrs.width;
+            document.getElementById("height").value = attrs.height;
+            document.getElementById("pixelSize").value = attrs.pixelSize;
+            document.getElementById("signedness").value = attrs.signed ? "Signed" : "Unsigned";
+            document.getElementById("pixelFormat").value = attrs.pixelFormat;
+        }
         updateImage();
-        /*fullEncodedBitStream = new Uint8Array(arrayBuffer);
-        encodedBitStream = new Uint8Array(arrayBuffer);
-        $('#encodedBytesRead').text('' + encodedBitStream.length.toLocaleString() + ' bytes');
-        $('#encodedBytesReadRange').attr('max', encodedBitStream.length - 1);
-        decode();
-        uncompressedImageFrame = new Uint8Array(decoder.getDecodedBuffer().length);
-        uncompressedImageFrame.set(decoder.getDecodedBuffer());
-        */
       }
       fileReader.readAsArrayBuffer(file);
     }
