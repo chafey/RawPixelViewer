@@ -1,0 +1,227 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- twitter bootstrap CSS stylesheet - not required by cornerstone -->
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+    <h1>
+    RawPixelViewer
+    </h1>
+
+    Draw a file containing raw pixel data to view it.  You can adjust the image properties before or after the image is dropped.
+
+    <br>
+
+    <br>
+    <form class="form-inline" role="form">
+      <div class="form-group">
+        <label>Width</label>
+        <input id="width" type="text" placeholder="e.g. 512" value="512">
+      </div>
+      <div class="form-group">
+        <label>Height</label>
+        <input id="height" type="text" placeholder="e.g. 512" value="512">
+      </div>
+      <div class="form-group">
+        <label>Pixel Size</label>
+        <input id="pixelSize" type="text" placeholder="e.g. 16" value="16">
+      </div>
+      <div class="form-group">
+        <label for="signedness">Signedness</label>
+        <select id="signedness" class="form-select">
+          <option selected>Signed</option>
+          <option>Unsigned</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="pixelFormat">Pixel Format</label>
+        <select id="pixelFormat" class="form-select">
+          <option selected>Grayscale</option>
+          <option>RGB</option>
+        </select>
+      </div>
+    </form>
+    <div id="dicomImage" style="width:512px;height:512px"
+         oncontextmenu="return false"
+         onmousedown="return false">
+    </div>
+</div>
+</body>
+
+<!-- include the cornerstone library -->
+<script src="https://unpkg.com/cornerstone-core/dist/cornerstone.min.js"></script>
+<script>window.cornerstone || document.write('<script src="https://unpkg.com/cornerstone-core">\x3C/script>')</script>
+
+<script>
+    let rawPixelData = new ArrayBuffer(512 * 512 * 2 * 4);    
+
+    // image enable the element
+    const element = document.getElementById('dicomImage');
+    cornerstone.enable(element);
+
+    const getMinMax = (buffer) => {
+    const result = {
+        min: 65535,
+        max: -65535
+    }
+
+    for(let i=0; i < buffer.length; i++) {
+      if(buffer[i] > result.max) {
+        result.max = buffer[i]
+      }
+      if(buffer[i] < result.min) {
+        result.min = buffer[i]
+      }
+    }
+    return result;
+   }
+   
+   const getPixelData = (width, height, bytesPerComponent, componentsPerPixel, signed) => {
+        if(signed) {
+            if(bytesPerComponent === 1) {
+                //return new Int8Array(width * height * componentsPerPixel)
+                return new Int8Array(rawPixelData)
+            } else {
+                //return new Int16Array(width * height * componentsPerPixel)
+                return new Int16Array(rawPixelData)
+            }
+        } else {
+            if(bytesPerComponent === 1) {
+                //return new Uint8Array(width * height * componentsPerPixel)
+                return new Uint8Array(rawPixelData)
+            } else {
+                //return new Uint16Array(width * height * componentsPerPixel)
+                return new Uint16Array(rawPixelData)
+            }
+        }
+   }
+   
+   const updateImage = () => {
+        const width = parseInt(document.getElementById('width').value);
+        const height = parseInt(document.getElementById('height').value);
+        const pixelSize = parseInt(document.getElementById('pixelSize').value);
+        const signed = document.getElementById('signedness').value === "Signed";
+        const pixelFormat = document.getElementById('pixelFormat').value;
+        const componentsPerPixel = pixelFormat === "RGB" ? 4 : 1;
+        const bytesPerComponent = pixelSize <= 8 ? 1 : 2;
+
+        const pixelData = getPixelData(width, height, bytesPerComponent, componentsPerPixel, signed)
+        const stride = width * componentsPerPixel;
+
+        const minMax = getMinMax(pixelData);
+        console.log(minMax)
+
+        const minPixelValue = minMax.min;
+        const maxPixelValue = minMax.max;
+        const windowWidth = maxPixelValue - minPixelValue;
+        const windowCenter = minPixelValue + (windowWidth / 2);
+
+        const image = {
+            imageId: Math.random(),
+            minPixelValue : minPixelValue,
+            maxPixelValue : maxPixelValue,
+            slope: 1.0,
+            intercept: 0,
+            windowCenter : windowCenter,
+            windowWidth : windowWidth,
+            render: componentsPerPixel === 3 ? cornerstone.renderColorImage : cornerstone.render,
+            getPixelData: () => {return pixelData},
+            rows: height,
+            columns: width,
+            height: height,
+            width: width,
+            color: pixelFormat == "RGB",
+            columnPixelSpacing: .8984375,
+            rowPixelSpacing: .8984375,
+            //sizeInBytes: rawPixelData.byteLength
+        }
+        console.log(image);
+        cornerstone.displayImage(element, image); 
+    }
+
+    hookElementChanged = (id) => {
+      document.getElementById(id).addEventListener('change', (event) => {
+        updateImage();
+      })
+    }
+    hookElementChanged("width");
+    hookElementChanged("height");
+    hookElementChanged("pixelSize");
+    hookElementChanged("signedness");
+    hookElementChanged("pixelFormat");
+    
+    // load the image and display it
+    updateImage();
+
+    // add event handlers to mouse move to adjust window/center
+    element.addEventListener('mousedown', function (e) {
+        let lastX = e.pageX;
+        let lastY = e.pageY;
+
+        function mouseMoveHandler(e) {
+            const deltaX = e.pageX - lastX;
+            const deltaY = e.pageY - lastY;
+            lastX = e.pageX;
+            lastY = e.pageY;
+
+            let viewport = cornerstone.getViewport(element);
+            viewport.voi.windowWidth += (deltaX / viewport.scale);
+            viewport.voi.windowCenter += (deltaY / viewport.scale);
+            cornerstone.setViewport(element, viewport);
+        };
+
+        function mouseUpHandler() {
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+        }
+
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+    });
+
+
+        // this function gets called once the user drops the file onto the div
+    function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+
+      // Get the FileList object that contains the list of files that were dropped
+      var files = evt.dataTransfer.files;
+
+      // this UI is only built for a single file so just dump the first one
+      var file = files[0];
+
+      var fileReader = new FileReader();
+      fileReader.onload = function (e) {
+        rawPixelData = e.target.result;
+        updateImage();
+        /*fullEncodedBitStream = new Uint8Array(arrayBuffer);
+        encodedBitStream = new Uint8Array(arrayBuffer);
+        $('#encodedBytesRead').text('' + encodedBitStream.length.toLocaleString() + ' bytes');
+        $('#encodedBytesReadRange').attr('max', encodedBitStream.length - 1);
+        decode();
+        uncompressedImageFrame = new Uint8Array(decoder.getDecodedBuffer().length);
+        uncompressedImageFrame.set(decoder.getDecodedBuffer());
+        */
+      }
+      fileReader.readAsArrayBuffer(file);
+    }
+
+
+    function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    }
+
+    
+
+    // Setup the dnd listeners.
+    var dropZone = document.getElementById('dicomImage');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
+</script>
+</html>
