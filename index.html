@@ -140,7 +140,13 @@
       };
     };
 
-    const guessWWWC = (width, height, pixelData, minMax) => {
+    const guessWWWC = (width, height, pixelData, minMax, bytesPerComponent) => {
+      if(bytesPerComponent === 1) {
+        return {
+          windowWidth: 256,
+          windowCenter: 127
+        }
+      }
       const histogram = getHistogram(width, height, pixelData, minMax);
       const windowWidth = histogram.lastBin - histogram.firstBin;
 
@@ -243,7 +249,7 @@
 
       const minMax = getMinMax(pixelData);
 
-      const wwwc = guessWWWC(width, height, pixelData, minMax);
+      const wwwc = guessWWWC(width, height, pixelData, minMax, bytesPerComponent);
 
       const minPixelValue = minMax.min;
       const maxPixelValue = minMax.max;
