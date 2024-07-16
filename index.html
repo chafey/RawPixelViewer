@@ -10,33 +10,91 @@
   <body>
     <div class="container">
       <h1>RawPixelViewer</h1>
-      Drag and drop a file containing raw pixel data to the image display area (black
-      box) below to view it.
-      <br />
-      You can adjust the image properties before or after the raw pixel data is
-      dropped.
-      <br />
-      You can adjust the window center/width by dragging the cursor (e.g. left
-      mouse button drag)
-      <br />
-      Image attributes are automatically set for common medical image file sizes (e.g. CT/MR 512x512, US 640x480, XA 1024x1024)
-      <br />
-      Window/Level is caculated using a histogram of the middle of the image. 
-      <br />
-      <div class="row">
-        <select id="imageSelector">
-          <option value="">--none--</option>
-          <option value="images/CT1-512-512-16-1-1.RAW">CT1</option>
-          <option value="images/CT2-512-512-16-1-1.RAW">CT2</option>>
-          <option value="images/MG1-3064-4664-16-0-1.RAW">MG1</option>
-          <option value="images/MR1-512-512-16-1-1.RAW">MR1</option>
-          <option value="images/MR2-1024-1024-16-0-1.RAW">MR2</option>
-          <option value="images/MR3-512-512-16-1-1.RAW">MR3</option>
-          <option value="images/MR4-512-512-16-0-1.RAW">MR4</option>
-          <option value="images/NM1-256-1024-16-1-1.RAW">NM1</option>
-        </select>
+      <div>
+        <a
+          class="btn btn-primary"
+          role="button"
+          data-toggle="collapse"
+          href="#collapseExample"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+        >
+          Click for help
+        </a>
+        <div class="collapse" id="collapseExample">
+          <div class="well">
+            <ul>
+              <li>
+                Drag and drop a file containing raw pixel data to the image
+                display area (black box) below to view it.
+              </li>
+              <li>
+                You can adjust the image properties before or after the raw
+                pixel data is dropped.
+              </li>
+              <li>
+                You can adjust the window center/width by dragging the cursor
+                (e.g. left mouse button drag)
+              </li>
+              Image attributes are automatically set for common medical image
+              file sizes (e.g. CT/MR 512x512, US 640x480, XA 1024x1024)
+              <li>
+                Window/Level is caculated using a histogram of the middle of the
+                image.
+              </li>
+              <li>
+                App will attempt to parse out attributes from dropped filenames
+                according to the following scheme:
+              </li>
+              <li>
+                $(IGNORED)-$(COLUMNS)-$(ROWS)-$(BITSALLOCATED)-$(PIXELREPRESENTATION)-$(SAMPLESPERPIXEL).$(IGNORED)
+              </li>
+              <li>
+              $(IGNORED) is ignored so you can have a descriptive name in front
+              of the first dash (-) and any extension you want following the
+              period (.)
+            </li>
+              <li>
+                The following filenames are treated the same:
+                <ul>
+                  <li>512-512-16-0-1</li>
+                  <li>CT1-512-512-16-0-1</li>
+                  <li>CT1-512-512-16-0-1.raw</li>
+                  <li>512-512-16-0-1.raw</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
+      <br />
       <form class="form-inline" role="form">
+        <div class="form-group">
+          <label>Image:</label>
+          <select id="imageSelector">
+            <option value="">--none--</option>
+            <option value="images/CT1-512-512-16-1-1.RAW">CT1</option>
+            <option value="images/CT2-512-512-16-1-1.RAW">CT2</option>
+            <option value="images/MG1-3064-4664-16-0-1.RAW">MG1</option>
+            <option value="images/MR1-512-512-16-1-1.RAW">MR1</option>
+            <option value="images/MR2-1024-1024-16-0-1.RAW">MR2</option>
+            <option value="images/MR3-512-512-16-1-1.RAW">MR3</option>
+            <option value="images/MR4-512-512-16-0-1.RAW">MR4</option>
+            <option value="images/NM1-256-1024-16-1-1.RAW">NM1</option>
+            <option value="images/RG1-1841-1955-16-0-1.RAW">RG1</option>
+            <option value="images/RG2-1760-2140-16-0-1.RAW">RG2</option>
+            <option value="images/RG3-1760-1760-16-0-1.RAW">RG3</option>
+            <option value="images/SC1-2048-2487-16-0-1.RAW">SC1</option>
+            <option value="images/US1-640-480-8-0-3.RAW">US1</option>
+            <option value="images/VL1-756-486-8-0-3.RAW">VL1</option>
+            <option value="images/VL2-756-486-8-0-3.RAW">VL2</option>
+            <option value="images/VL3-756-486-8-0-3.RAW">VL3</option>
+            <option value="images/VL4-756-486-8-0-3.RAW">VL4</option>
+            <option value="images/VL5-2670-3340-8-0-3.RAW">VL5</option>
+            <option value="images/VL6-756-486-8-0-3.RAW">VL6</option>
+            <option value="images/XA1-1024-1024-16-0-1.RAW">XA1</option>
+          </select>
+        </div>
         <div class="form-group">
           <label>Width</label>
           <input id="width" type="text" placeholder="e.g. 512" value="512" />
@@ -74,6 +132,12 @@
   </body>
 
   <!-- include the cornerstone library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"
+  ></script>
   <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.min.js"></script>
   <script src="getMinMax.js"></script>
   <script src="getHistogram.js"></script>
@@ -94,7 +158,6 @@
   </script>
 
   <script>
-
     // image enable the element
     const element = document.getElementById("dicomImage");
     cornerstone.enable(element);

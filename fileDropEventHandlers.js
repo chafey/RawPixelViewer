@@ -10,7 +10,6 @@ function handleFileSelect(evt) {
 
   // this UI is only built for a single file so just dump the first one
   var file = files[0];
-  console.log(file);
 
   var fileReader = new FileReader();
   fileReader.onload = function (e) {

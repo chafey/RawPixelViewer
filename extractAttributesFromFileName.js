@@ -8,7 +8,6 @@ function extractAttributesFromFileName(fileName) {
         fileName = fileName.substr(0, lastPeriod);
     }
     const pieces = fileName.split('-');
-    console.log(pieces);
     if(pieces.length < 5) {
         return;
     }

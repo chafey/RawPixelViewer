@@ -4,7 +4,6 @@ const displayImage= (newRawPixelData, attrs) => {
     if(newRawPixelData) {
         rawPixelData = newRawPixelData;
     }
-    console.log(attrs);
     if (attrs) {
       document.getElementById("width").value = attrs.width;
       document.getElementById("height").value = attrs.height;

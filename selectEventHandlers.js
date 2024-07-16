@@ -7,7 +7,6 @@ function load(url) {
     .then((arrayBuffer) => {
       const rawPixelData = arrayBuffer;
       const attrs = extractAttributesFromFileName(url);
-      console.log(attrs);
       displayImage(rawPixelData, attrs);
     });
 }
