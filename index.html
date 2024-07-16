@@ -23,44 +23,36 @@
         </a>
         <div class="collapse" id="collapseExample">
           <div class="well">
+            This web app lets you view raw pixel data (pixel data without a
+            header describg the image attributes).
+            <br />
+            <br />
+            Features:
             <ul>
               <li>
                 Drag and drop a file containing raw pixel data to the image
-                display area (black box) below to view it.
+                display area (black box) below to view it. The app will attempt
+                to guess the image attributes using the following approach:
               </li>
+              <ul>
+                <li>
+                  Based on parsing the filename using the format
+                  -$(COLUMNS)-$(ROWS)-$(BITSALLOCATED)-$(PIXELREPRESENTATION)-$(SAMPLESPERPIXEL)
+                </li>
+                <li>
+                  Based on file size for common medical images (e.g. CT 512x512,
+                  MR 512x512)
+                </li>
+              </ul>
               <li>
-                You can adjust the image properties before or after the raw
-                pixel data is dropped.
-              </li>
-              <li>
-                You can adjust the window center/width by dragging the cursor
-                (e.g. left mouse button drag)
-              </li>
-              Image attributes are automatically set for common medical image
-              file sizes (e.g. CT/MR 512x512, US 640x480, XA 1024x1024)
-              <li>
-                Window/Level is caculated using a histogram of the middle of the
-                image.
-              </li>
-              <li>
-                App will attempt to parse out attributes from dropped filenames
-                according to the following scheme:
-              </li>
-              <li>
-                $(IGNORED)-$(COLUMNS)-$(ROWS)-$(BITSALLOCATED)-$(PIXELREPRESENTATION)-$(SAMPLESPERPIXEL).$(IGNORED)
-              </li>
-              <li>
-              $(IGNORED) is ignored so you can have a descriptive name in front
-              of the first dash (-) and any extension you want following the
-              period (.)
-            </li>
-              <li>
-                The following filenames are treated the same:
+                Image Display
                 <ul>
-                  <li>512-512-16-0-1</li>
-                  <li>CT1-512-512-16-0-1</li>
-                  <li>CT1-512-512-16-0-1.raw</li>
-                  <li>512-512-16-0-1.raw</li>
+                  <li>Manual adjustment of image attributes</li>
+                  <li>
+                    Automatic window width/window center based on histogram of
+                    middle of image
+                  </li>
+                  <li>Manual adjust of ww/wc by dragging left mouse button</li>
                 </ul>
               </li>
             </ul>
@@ -89,7 +81,7 @@
             <option value="images/VL1-756-486-8-0-3.RAW">VL1</option>
             <option value="images/VL2-756-486-8-0-3.RAW">VL2</option>
             <option value="images/VL3-756-486-8-0-3.RAW">VL3</option>
-            <option value="images/VL4-756-486-8-0-3.RAW">VL4</option>
+            <option value="images/VL4-2226-1868-8-0-3.RAW">VL4</option>
             <option value="images/VL5-2670-3340-8-0-3.RAW">VL5</option>
             <option value="images/VL6-756-486-8-0-3.RAW">VL6</option>
             <option value="images/XA1-1024-1024-16-0-1.RAW">XA1</option>
@@ -97,15 +89,15 @@
         </div>
         <div class="form-group">
           <label>Width</label>
-          <input id="width" type="text" placeholder="e.g. 512" value="512" />
+          <input id="width" type="text" placeholder="e.g. 512" size="5" value="512" />
         </div>
         <div class="form-group">
           <label>Height</label>
-          <input id="height" type="text" placeholder="e.g. 512" value="512" />
+          <input id="height" type="text" placeholder="e.g. 512" size="5" value="512" />
         </div>
         <div class="form-group">
           <label>Component Size (bits)</label>
-          <input id="pixelSize" type="text" placeholder="e.g. 16" value="16" />
+          <input id="pixelSize" type="text" placeholder="e.g. 16" size="2" value="16" />
         </div>
         <div class="form-group">
           <label for="signedness">Signedness</label>
