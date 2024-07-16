@@ -6,7 +6,7 @@ const guessAttributesFromFileSize = (fileSize) => {
         height: 512,
         pixelSize: 16,
         signed: true,
-        pixelFormat: "Grayscale",
+        pixelFormat: "MONOCHROME2",
       };
     } else if (fileSize === 2097152) {
       // XA
@@ -15,7 +15,7 @@ const guessAttributesFromFileSize = (fileSize) => {
         height: 1024,
         pixelSize: 16,
         signed: true,
-        pixelFormat: "Grayscale",
+        pixelFormat: "MONOCHROME2",
       };
     } else if (fileSize === 921600) {
       // US

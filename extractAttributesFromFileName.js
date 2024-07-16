@@ -17,7 +17,7 @@ function extractAttributesFromFileName(fileName) {
         height: parseInt(pieces[1]),
         pixelSize: parseInt(pieces[2]),
         signed: parseInt(pieces[3]),
-        pixelFormat: parseInt(pieces[4]) === 3 ? "RGB" : "Grayscale",
+        pixelFormat: parseInt(pieces[4]) === 3 ? "RGB" : "MONOCHROME2",
     }
 
 }

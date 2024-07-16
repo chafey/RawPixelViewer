@@ -65,26 +65,26 @@
           <label>Image:</label>
           <select id="imageSelector">
             <option value="">--none--</option>
-            <option value="images/CT1-512-512-16-1-1.RAW">CT1</option>
-            <option value="images/CT2-512-512-16-1-1.RAW">CT2</option>
-            <option value="images/MG1-3064-4664-16-0-1.RAW">MG1</option>
-            <option value="images/MR1-512-512-16-1-1.RAW">MR1</option>
-            <option value="images/MR2-1024-1024-16-0-1.RAW">MR2</option>
-            <option value="images/MR3-512-512-16-1-1.RAW">MR3</option>
-            <option value="images/MR4-512-512-16-0-1.RAW">MR4</option>
-            <option value="images/NM1-256-1024-16-1-1.RAW">NM1</option>
-            <option value="images/RG1-1841-1955-16-0-1.RAW">RG1</option>
-            <option value="images/RG2-1760-2140-16-0-1.RAW">RG2</option>
-            <option value="images/RG3-1760-1760-16-0-1.RAW">RG3</option>
-            <option value="images/SC1-2048-2487-16-0-1.RAW">SC1</option>
-            <option value="images/US1-640-480-8-0-3.RAW">US1</option>
-            <option value="images/VL1-756-486-8-0-3.RAW">VL1</option>
-            <option value="images/VL2-756-486-8-0-3.RAW">VL2</option>
-            <option value="images/VL3-756-486-8-0-3.RAW">VL3</option>
-            <option value="images/VL4-2226-1868-8-0-3.RAW">VL4</option>
-            <option value="images/VL5-2670-3340-8-0-3.RAW">VL5</option>
-            <option value="images/VL6-756-486-8-0-3.RAW">VL6</option>
-            <option value="images/XA1-1024-1024-16-0-1.RAW">XA1</option>
+            <option value="images/CT1-512-512-16-1-1.RAW">CT1-512-512-16-1-1.RAW</option>
+            <option value="images/CT2-512-512-16-1-1.RAW">CT2-512-512-16-1-1.RAW</option>
+            <option value="images/MG1-3064-4664-16-0-1.RAW">MG1-3064-4664-16-0-1.RAW</option>
+            <option value="images/MR1-512-512-16-1-1.RAW">MR1-512-512-16-1-1.RAW</option>
+            <option value="images/MR2-1024-1024-16-0-1.RAW">MR2-1024-1024-16-0-1.RAW</option>
+            <option value="images/MR3-512-512-16-1-1.RAW">MR3-512-512-16-1-1.RAW</option>
+            <option value="images/MR4-512-512-16-0-1.RAW">MR4-512-512-16-0-1.RAW</option>
+            <option value="images/NM1-256-1024-16-1-1.RAW">NM1-256-1024-16-1-1.RAW</option>
+            <option value="images/RG1-1841-1955-16-0-1.RAW">RG1-1841-1955-16-0-1.RAW</option>
+            <option value="images/RG2-1760-2140-16-0-1.RAW">RG2-1760-2140-16-0-1.RAW</option>
+            <option value="images/RG3-1760-1760-16-0-1.RAW">RG3-1760-1760-16-0-1.RAW</option>
+            <option value="images/SC1-2048-2487-16-0-1.RAW">SC1-2048-2487-16-0-1.RAW</option>
+            <option value="images/US1-640-480-8-0-3.RAW">US1-640-480-8-0-3.RAW</option>
+            <option value="images/VL1-756-486-8-0-3.RAW">VL1-756-486-8-0-3.RAW</option>
+            <option value="images/VL2-756-486-8-0-3.RAW">VL2-756-486-8-0-3.RAW</option>
+            <option value="images/VL3-756-486-8-0-3.RAW">VL3-756-486-8-0-3.RAW</option>
+            <option value="images/VL4-2226-1868-8-0-3.RAW">VL4-2226-1868-8-0-3.RAW</option>
+            <option value="images/VL5-2670-3340-8-0-3.RAW">VL5-2670-3340-8-0-3.RAW</option>
+            <option value="images/VL6-756-486-8-0-3.RAW">VL6-756-486-8-0-3.RAW</option>
+            <option value="images/XA1-1024-1024-16-0-1.RAW">XA1-1024-1024-16-0-1.RAW</option>
           </select>
         </div>
         <div class="form-group">
@@ -96,20 +96,20 @@
           <input id="height" type="text" placeholder="e.g. 512" size="5" value="512" />
         </div>
         <div class="form-group">
-          <label>Component Size (bits)</label>
+          <label>Bits Allocated</label>
           <input id="pixelSize" type="text" placeholder="e.g. 16" size="2" value="16" />
         </div>
         <div class="form-group">
-          <label for="signedness">Signedness</label>
+          <label for="signedness">Pixel Representation</label>
           <select id="signedness" class="form-select">
-            <option selected>Signed</option>
-            <option>Unsigned</option>
+            <option selected>Signed (1)</option>
+            <option>Unsigned (0)</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="pixelFormat">Pixel Format</label>
+          <label for="pixelFormat">Photometric Interpretation</label>
           <select id="pixelFormat" class="form-select">
-            <option selected>Grayscale</option>
+            <option selected>MONOCHROME2</option>
             <option>RGB</option>
           </select>
         </div>

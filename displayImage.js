@@ -9,15 +9,15 @@ const displayImage= (newRawPixelData, attrs) => {
       document.getElementById("height").value = attrs.height;
       document.getElementById("pixelSize").value = attrs.pixelSize;
       document.getElementById("signedness").value = attrs.signed
-        ? "Signed"
-        : "Unsigned";
+        ? "Signed (1)"
+        : "Unsigned (0)";
       document.getElementById("pixelFormat").value = attrs.pixelFormat;
     }
 
     const width = parseInt(document.getElementById("width").value);
     const height = parseInt(document.getElementById("height").value);
     const pixelSize = parseInt(document.getElementById("pixelSize").value);
-    const signed = document.getElementById("signedness").value === "Signed";
+    const signed = document.getElementById("signedness").value === "Signed (1)";
     const pixelFormat = document.getElementById("pixelFormat").value;
     const componentsPerPixel = pixelFormat === "RGB" ? 3 : 1;
     const bytesPerComponent = pixelSize <= 8 ? 1 : 2;
